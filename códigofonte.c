@@ -2,13 +2,14 @@
 #include <stdlib.h>
 #include <locale.h>
 #include <windows.h>  // Adicionada biblioteca para utilizar o Beep
+#include <conio.h>   // Adicionada biblioteca para utilizar o getch
 
 int main(void) {
     setlocale(LC_ALL, "Portuguese");
 
     int sec = 0, min = 0, hr = 0;
     int i = 0;
-    int start = 0;  // Variável para controlar se o cronômetro está em execução (1) ou parado (0)
+    int start = 0;
     int last_sec = 0, last_min = 0, last_hr = 0;
 
     do {
@@ -26,9 +27,8 @@ int main(void) {
         if (min == 60) {
             min = 0;
             hr++;
-            // Emitir um sinal sonoro a cada hora (3600 segundos)
             if (hr % 1 == 0 && min == 0 && sec == 0) {
-                Beep(1000, 500);  // Beep com frequência de 1000 Hz e duração de 500 ms
+                Beep(1000, 500);
             }
         }
 
@@ -38,14 +38,13 @@ int main(void) {
 
         sec++;
 
-        // Verificar se o cronômetro está em execução e se uma hora (3600 segundos) se passou
         if (start && sec == 0 && min == 0 && hr % 1 == 0) {
-            Beep(1000, 500);  // Beep ao final de cada hora durante a contagem progressiva
+            Beep(1000, 500);
         }
 
         printf("Pressione 's' para start, 'p' para parar, 'r' para resetar: ");
-        char input;
-        scanf(" %c", &input);
+        char input = _getch();  // Usar _getch para obter o caractere imediatamente
+        printf("%c\n", input);  // Imprimir o caractere para visualização (opcional)
 
         switch (input) {
             case 's':
@@ -60,20 +59,19 @@ int main(void) {
                 break;
         }
 
-        // Armazenar o último valor de contagem
         last_sec = sec;
         last_min = min;
         last_hr = hr;
 
         printf("Pressione 'q' para sair ou qualquer outra tecla para continuar: ");
-        scanf(" %c", &input);
+        input = _getch();  // Usar _getch para obter o caractere imediatamente
+        printf("%c\n", input);  // Imprimir o caractere para visualização (opcional)
         if (input == 'q') {
-            i = 1;  // Sair do loop ao pressionar 'q'
+            i = 1;
         }
 
     } while (i == 0);
 
-    // Armazenar o último valor de contagem antes de sair do programa
     printf("Armazenando último valor de contagem: %02dh:%02dm:%02ds\n", last_hr, last_min, last_sec);
 
     system("pause");
